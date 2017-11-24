@@ -53,7 +53,7 @@ public class Inventory implements IInventory {
 	private Product productFromString( String string ) {
 		
 		// Create regex matcher
-		String pattern = "^ *([a-zA-Z0-9]+), *(\\w+) *, *(\\d+(?:\\.\\d*)?) *, *(\\d+(?:\\.\\d*)?) *, *(\\d+) *$";
+		String pattern = "^ *([a-zA-Z0-9]+),(\\w+),(\\d+(?:\\.\\d*)?|\\.\\d+),(\\d+(?:\\.\\d*)?|\\.\\d+),(\\d+)(?:\\.0*)? *$";
 		Matcher m = Pattern.compile(pattern, Pattern.DOTALL).matcher(string);
 		
 		// If matches pattern
@@ -61,8 +61,8 @@ public class Inventory implements IInventory {
 
 			String upc = m.group(1);
 			String name = m.group(2);
-			float wholesalePrice = Float.parseFloat(m.group(3));
-			float retailPrice = Float.parseFloat(m.group(4));
+			double wholesalePrice = Float.parseFloat(m.group(3));
+			double retailPrice = Float.parseFloat(m.group(4));
 			int quantity = Integer.parseInt(m.group(5));
 			
 			// Return a new product
