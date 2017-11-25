@@ -39,31 +39,50 @@ public class CashRegisterUnitTests {
 	}
 
 	@Test
-	public void TransactionTotalStartsWithZero() {
+	public void transactionTotalStartsWithZero() {
 		register.beginTransaction();
 		assertEquals( new BigDecimal( 0 ), register.getTotal() );
 	}
 
 	@Test
-	public void TransactionTotalIsCorrect() {
+	public void transactionTotalIsCorrect() {
 		presetCashRegister();
 
-		assertEquals( new BigDecimal( "21.00" ), register.getTotal() );
+		assertTrue( new BigDecimal( 21 ).compareTo( register.getTotal() ) == 0 );
 
 		register.beginTransaction();
-		assertEquals( new BigDecimal( 0 ), register.getTotal() );
+		assertTrue( new BigDecimal( 0 ).compareTo( register.getTotal() ) == 0 );
 	}
 
 	@Test
-	public void TransactionChangeIsCorrect() {
+	public void transactionPaidAmmountIsCorrect() {
 		presetCashRegister();
+		
+		BigDecimal paid = new BigDecimal( 25 );
+		register.pay( paid );
+		assertTrue( paid.compareTo( new BigDecimal( register.getPaidAmount() ) ) == 0 );
+		
+		register.beginTransaction();
+		paid = new BigDecimal( register.getPaidAmount() );
+		assertTrue( paid.compareTo( new BigDecimal( 0 ) ) == 0 );
+	}
+
+	@Test
+	public void transactionChangeAmmountIsCorrect() {
+		presetCashRegister();
+		
 		BigDecimal change = register.pay( new BigDecimal( 25 ) );
 
-		assertEquals( new BigDecimal( "4.00" ), change );
+		assertTrue( change.compareTo( new BigDecimal( 4 ) ) == 0 );
+		assertTrue( change.compareTo( new BigDecimal( register.getChangeAmount() ) ) == 0 );
+		
+		register.beginTransaction();
+		change = new BigDecimal( register.getChangeAmount() );
+		assertTrue( change.compareTo( new BigDecimal( 0 ) ) == 0 );
 	}
 
 	@Test
-	public void TransactionTotalBoughtItemsIsCorrect() {
+	public void transactionTotalBoughtItemsIsCorrect() {
 		presetCashRegister();
 		
 		int count = 0;
@@ -83,6 +102,19 @@ public class CashRegisterUnitTests {
 		
 		// This should throw an UnsupportedOperationException
 		list.add( new Product( "A123", "Apple", 0.50f, 1.0f, 100 ) );
+	}
+	
+	@Test
+	public void inventoryIsConsumedWhenTransactionIsPaid() {
+		presetCashRegister();
+		
+		String upc = "A123";
+		Product product = ProductHelper.getProductFromList( inventory.list(), upc );
+		Integer quantityBefore = product.getQuantity();
+		
+		register.pay(new BigDecimal( 25 ) );
+
+		assertNotEquals( quantityBefore, product.getQuantity() );
 	}
 
 }

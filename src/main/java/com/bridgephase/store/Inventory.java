@@ -8,8 +8,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Scanner;
 import java.util.Collections;
+import java.util.Iterator;
 
 import com.bridgephase.store.interfaces.IInventory;
+import com.bridgephase.helper.*;
 
 public class Inventory implements IInventory {
 	
@@ -43,6 +45,20 @@ public class Inventory implements IInventory {
 		// Returns an unmodifiable Products list
 		return Collections.unmodifiableList( products );
 	}
+
+	@Override
+	public void consume( String upc, int quantity ) {
+		
+		// Iterate through all items in inventory
+		Product product = ProductHelper.getProductFromList(products, upc);
+		if( product != null ) {
+			product.setQuantity( product.getQuantity() - quantity );
+		}
+	}
+	
+	public void consume( String upc ) {
+		consume( upc, 1 );
+	}
 	
 	/**
 	 * Creates a product from a string as long as it matches the pattern (string,string,float,float,int)
@@ -61,9 +77,9 @@ public class Inventory implements IInventory {
 
 			String upc = m.group( 1 );
 			String name = m.group( 2 );
-			float wholesalePrice = Float.parseFloat( m.group( 3 ) );
-			float retailPrice = Float.parseFloat( m.group( 4 ) );
-			int quantity = Integer.parseInt( m.group( 5 ) );
+			Float wholesalePrice = Float.parseFloat( m.group( 3 ) );
+			Float retailPrice = Float.parseFloat( m.group( 4 ) );
+			Integer quantity = Integer.parseInt( m.group( 5 ) );
 			
 			// Return a new product
 			return new Product( upc, name, wholesalePrice, retailPrice, quantity );	
@@ -72,5 +88,7 @@ public class Inventory implements IInventory {
 			return null;
 		}
 	}
-
+	
+	
+	
 }

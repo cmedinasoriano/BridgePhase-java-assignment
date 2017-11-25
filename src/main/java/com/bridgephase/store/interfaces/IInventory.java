@@ -27,11 +27,20 @@ public interface IInventory {
 	 * 
 	 * @param inputStream the stream from where to read the inventory
 	 */
-	public void replenish(InputStream inputStream);
+	public void replenish( InputStream inputStream );
 
 	/**
 	 * @return returns an unmodifiable <code>List</code> of <code>Product</code> representing 
 	 * products inside the inventory.
 	 */
 	public List<Product> list();
+
+	/**
+	 * Consumes/decreases inventory item based on its UPC
+	 * 
+	 * @param upc a <code>String</code> identifying item code from which to consume from inventory
+	 * @param quantity an <code>int</code> identifying item quantity to be consumed from inventory
+	 */
+	public void consume( String upc, int quantity );
+	
 }

@@ -15,6 +15,7 @@ import java.util.Collections;
 
 import com.bridgephase.store.interfaces.ICashRegister;
 import com.bridgephase.store.interfaces.IInventory;
+import com.bridgephase.helper.*;
 
 public class CashRegister implements ICashRegister {
 
@@ -31,19 +32,21 @@ public class CashRegister implements ICashRegister {
 	@Override
 	public void beginTransaction() {
 		transactionItems.clear();
+		paid = 0;
+		change = 0;
 	}
 
 	@Override
 	public boolean scan(String upc) {
 		
 		// Get Product from Inventory
-		Product product = getProductFromList( inventory.list(), upc );
+		Product product = ProductHelper.getProductFromList( inventory.list(), upc );
 		
 		// If Product exists in Inventory
 		if( product != null ) {
 		
 			// Get Product from Items in transaction
-			Product item = getProductFromList( transactionItems, upc );
+			Product item = ProductHelper.getProductFromList( transactionItems, upc );
 			
 			// If Product was already added to transaction
 			if( item != null ) {
@@ -69,6 +72,7 @@ public class CashRegister implements ICashRegister {
 	public BigDecimal getTotal() {
 		BigDecimal total = new BigDecimal( 0 );
 		
+		// Iterate through bought items
 		for( Iterator<Product> i = transactionItems.iterator(); i.hasNext(); ) {
 			Product item = i.next();
 			
@@ -87,6 +91,14 @@ public class CashRegister implements ICashRegister {
 		paid = cashAmount.floatValue();
 		change = changeOutput.floatValue();
 		
+		// Iterate through bought items list
+		for( Iterator<Product> i = list().iterator(); i.hasNext(); ) {
+			Product item = i.next();
+			
+			// Consume inventory
+			inventory.consume( item.getUpc(), item.getQuantity() );
+		}
+		
 		return changeOutput;
 	}
 
@@ -100,8 +112,8 @@ public class CashRegister implements ICashRegister {
 
 			String format = "%d %s @ $%1.2f: $%1.2f\n";
 			String name = item.getName();
-			int quantity = item.getQuantity();
-			float price = item.getRetailPrice();
+			Integer quantity = item.getQuantity();
+			Float price = item.getRetailPrice();
 			BigDecimal subTotal = new BigDecimal( price ).multiply( new BigDecimal( quantity ) );
 			
 			itemsBought = itemsBought + quantity;
@@ -129,19 +141,6 @@ public class CashRegister implements ICashRegister {
 
 	public float getChangeAmount() {
 		return change;
-	}
-
-	private Product getProductFromList(List<Product> list, String upc) {
-		// Iterate through inventory
-		for( Iterator<Product> i = list.iterator(); i.hasNext(); ) {
-			Product item = i.next();
-			
-			// If scanned upc is found
-			if(item.getUpc().equals( upc )) {
-				return item;
-			}
-		}
-		return null;
 	}
 	
 	@Override

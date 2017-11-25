@@ -3,11 +3,11 @@ package com.bridgephase.store;
 public class Product {
 	private String upc;
 	private String name;
-	private float wholesalePrice;
-	private float retailPrice;
+	private Float wholesalePrice;
+	private Float retailPrice;
 	private Integer quantity;
 
-	public Product(String upc, String name, float wholesalePrice, float retailPrice, int quantity) {
+	public Product(String upc, String name, Float wholesalePrice, Float retailPrice, Integer quantity) {
 		this.upc = upc;
 		this.name = name;
 		this.wholesalePrice = wholesalePrice;
@@ -27,7 +27,7 @@ public class Product {
 		return wholesalePrice;
 	}
 
-	public void setWholesalePrice(float wholesalePrice) {
+	public void setWholesalePrice(Float wholesalePrice) {
 		this.wholesalePrice = wholesalePrice;
 	}
 
@@ -35,7 +35,7 @@ public class Product {
 		return retailPrice;
 	}
 
-	public void setRetailPrice(float retailPrice) {
+	public void setRetailPrice(Float retailPrice) {
 		this.retailPrice = retailPrice;
 	}
 
