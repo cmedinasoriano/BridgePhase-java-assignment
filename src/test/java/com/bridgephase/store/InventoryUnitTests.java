@@ -52,7 +52,7 @@ public class InventoryUnitTests {
 		List<Product> list = inventory.list();
 		
 		// This should throw an UnsupportedOperationException
-		list.add( new Product( "A123","Apple",0.50,1,100 ) );
+		list.add( new Product( "A123", "Apple", 0.50f, 1.0f, 100 ) );
 	}
 	
 	/**

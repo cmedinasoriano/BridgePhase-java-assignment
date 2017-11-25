@@ -23,7 +23,7 @@ public class Product {
 		this.name = name;
 	}
 
-	public double getWholesalePrice() {
+	public float getWholesalePrice() {
 		return wholesalePrice;
 	}
 
@@ -31,7 +31,7 @@ public class Product {
 		this.wholesalePrice = wholesalePrice;
 	}
 
-	public double getRetailPrice() {
+	public float getRetailPrice() {
 		return retailPrice;
 	}
 

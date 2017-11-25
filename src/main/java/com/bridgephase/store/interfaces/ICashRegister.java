@@ -2,9 +2,6 @@ package com.bridgephase.store.interfaces;
 
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.util.List;
-
-import com.bridgephase.store.Product;
 
 /**
  * Interface that represents a Cash Register.
@@ -61,5 +58,5 @@ public interface ICashRegister {
 	 * 
 	 * @param os the OutputStream
 	 */
-	public void printReceipt(OutputStream os);
+	public void printReceipt(OutputStream os) throws Exception;
 }

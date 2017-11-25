@@ -1,12 +1,17 @@
 package com.bridgephase.store;
 
 import java.io.ByteArrayInputStream;
-
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.io.IOException;
+import java.math.BigDecimal;
 
 import com.bridgephase.store.interfaces.IInventory;
-import com.bridgephase.store.MyUncaughtExceptionHandler;;
+import com.bridgephase.store.MyUncaughtExceptionHandler;
+import com.bridgephase.store.CashRegister;
 
 
 /**
@@ -28,21 +33,32 @@ public class StoreApplication {
 	 * 
 	 * @param args
 	 */
-	public static void main(String args[]) throws UnsupportedEncodingException {
+	public static void main(String args[]) throws IOException, UnsupportedEncodingException {
 		
 		// Set a custom error handler as the default exception handler in main/current thread
 		Thread.currentThread().setUncaughtExceptionHandler( new MyUncaughtExceptionHandler() );
 		
 		InputStream input = inputStreamFromString(
 				"upc,name,wholesalePrice,retailPrice,quantity\n" + 
-				"A123,Apple,0.50,1.00,100");
+				"A123,Apple,0.50,1.00,100\n" +
+				"B234,Peach,0.35,0.75,200\n" +
+				"C123,Milk,2.15,4.50,40" );
 		IInventory inventory = new Inventory();
 		inventory.replenish(input);
-
-		for (Product product : inventory.list()) {
-			System.out.println("Found a product " + product);
-		}
 		
+		CashRegister register = new CashRegister( inventory );
+		
+		// Begin transaction and scan items
+		register.beginTransaction();
+		for(int i=0; i<3; i++) register.scan("A123");
+		for(int i=0; i<2; i++) register.scan("C123");
+		for(int i=0; i<12; i++) register.scan("B234");
+		register.pay( new BigDecimal(25) );
+		
+		OutputStream output = System.out;
+		register.printReceipt(output);
+		
+		output.flush();
 	}
 
 	/**
