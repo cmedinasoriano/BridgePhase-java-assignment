@@ -61,8 +61,8 @@ public class Inventory implements IInventory {
 
 			String upc = m.group(1);
 			String name = m.group(2);
-			double wholesalePrice = Float.parseFloat(m.group(3));
-			double retailPrice = Float.parseFloat(m.group(4));
+			float wholesalePrice = Float.parseFloat(m.group(3));
+			float retailPrice = Float.parseFloat(m.group(4));
 			int quantity = Integer.parseInt(m.group(5));
 			
 			// Return a new product
