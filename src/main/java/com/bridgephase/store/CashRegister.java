@@ -21,8 +21,8 @@ public class CashRegister implements ICashRegister {
 
 	private IInventory inventory;
 	private ArrayList<Product> transactionItems;
-	private float paid;
-	private float change;
+	private Float paid;
+	private Float change;
 
 	public CashRegister(IInventory inventory) {
 		this.inventory = inventory;
@@ -32,8 +32,8 @@ public class CashRegister implements ICashRegister {
 	@Override
 	public void beginTransaction() {
 		transactionItems.clear();
-		paid = 0;
-		change = 0;
+		paid = 0.f;
+		change = 0.f;
 	}
 
 	@Override
@@ -42,27 +42,32 @@ public class CashRegister implements ICashRegister {
 		// Get Product from Inventory
 		Product product = ProductHelper.getProductFromList( inventory.list(), upc );
 		
-		// If Product exists in Inventory
+		// If Product exists and has Inventory
 		if( product != null ) {
 		
 			// Get Product from Items in transaction
 			Product item = ProductHelper.getProductFromList( transactionItems, upc );
 			
-			// If Product was already added to transaction
-			if( item != null ) {
-				item.setQuantity(item.getQuantity() + 1);
-			} else {
-				// Adds 1 item to transaction
-				transactionItems.add( 
-						new Product(
-								upc, 
-								product.getName(), 
-								product.getWholesalePrice(),
-								product.getRetailPrice(),
-								1 ) );
+			// If item doesn't exists create it with quantity 0
+			if( item == null ) {
+				item = new Product(
+						upc, 
+						product.getName(), 
+						product.getWholesalePrice(),
+						product.getRetailPrice(),
+						0 );
+				transactionItems.add( item );
 			}
 			
-			return true;
+			// If Product inventory is greater than quantity to be bought
+			if( product.getQuantity() > item.getQuantity() ) {
+				
+				// Increment item to be bought by 1
+				item.setQuantity(item.getQuantity() + 1);
+				
+				return true;
+			}
+			
 		}
 		
 		return false;

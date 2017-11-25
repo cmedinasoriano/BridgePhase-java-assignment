@@ -49,15 +49,11 @@ public class Inventory implements IInventory {
 	@Override
 	public void consume( String upc, int quantity ) {
 		
-		// Iterate through all items in inventory
+		// Find product in inventory by upc
 		Product product = ProductHelper.getProductFromList(products, upc);
 		if( product != null ) {
 			product.setQuantity( product.getQuantity() - quantity );
 		}
-	}
-	
-	public void consume( String upc ) {
-		consume( upc, 1 );
 	}
 	
 	/**

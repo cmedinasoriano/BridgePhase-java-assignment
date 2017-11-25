@@ -116,5 +116,20 @@ public class CashRegisterUnitTests {
 
 		assertNotEquals( quantityBefore, product.getQuantity() );
 	}
+	
+	@Test
+	public void inventoryValidatesInventoryAvailability() {
+		presetCashRegister();
+		
+		String upc = "A123";
+		Product product = ProductHelper.getProductFromList( inventory.list(), upc );
+		Product item = ProductHelper.getProductFromList( register.list(), upc );
+		
+		// Scan remaining items in inventory
+		for(int i = item.getQuantity(); i < product.getQuantity() ; i++) register.scan("A123");
+
+		// Should assert to false since there aren't enough quantities in inventory
+		assertFalse( register.scan("A123") );
+	}
 
 }
