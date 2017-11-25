@@ -2,7 +2,6 @@ package com.bridgephase.store.interfaces;
 
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 import com.bridgephase.store.Product;

@@ -2,10 +2,7 @@ package com.bridgephase.store;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -15,8 +12,6 @@ import com.bridgephase.store.Inventory;
 import com.bridgephase.store.Product;
 import com.bridgephase.store.interfaces.IInventory;
 import com.bridgephase.helper.*;
-
-import junit.framework.AssertionFailedError;
 
 public class InventoryUnitTests {
 
@@ -60,11 +55,35 @@ public class InventoryUnitTests {
 		
 		String upc = "A123";
 		Product product = ProductHelper.getProductFromList( inventory.list(), upc );
-		Integer quantityBefore = new Integer( product.getQuantity() );
+		Integer quantityBefore = product.getQuantity();
 		
 		inventory.consume( upc, 99 );
 		
 		assertNotEquals( quantityBefore, product.getQuantity() );
+		
+	}
+	
+	@Test
+	public void inventoryIsReplenished() throws Exception {
+		
+		InputStream input = Helper.inputStreamFromString(
+				"upc,name,wholesalePrice,retailPrice,quantity\n" + 
+				"A123,Apple Red,0.60,1.20,100" );
+		
+		String upc = "A123";
+		Product product = ProductHelper.getProductFromList( inventory.list(), upc );
+		String nameBefore = product.getName();
+		Float wholesalePriceBefore = product.getWholesalePrice();
+		Float retailPriceBefore = product.getRetailPrice();
+		Integer quantityBefore = product.getQuantity();
+		
+		inventory.replenish(input);
+
+		assertNotEquals( nameBefore, product.getName() );
+		assertNotEquals( wholesalePriceBefore, product.getWholesalePrice() );
+		assertNotEquals( retailPriceBefore, product.getRetailPrice() );
+		assertNotEquals( quantityBefore, product.getQuantity() );
+		assertNotEquals( new Integer( 100 ), product.getQuantity() );
 		
 	}
 	

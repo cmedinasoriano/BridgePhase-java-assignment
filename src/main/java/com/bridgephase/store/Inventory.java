@@ -1,14 +1,12 @@
 package com.bridgephase.store;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Scanner;
 import java.util.Collections;
-import java.util.Iterator;
 
 import com.bridgephase.store.interfaces.IInventory;
 import com.bridgephase.helper.*;
@@ -25,19 +23,28 @@ public class Inventory implements IInventory {
 	public void replenish(InputStream inputStream) {
 		// Use scanner to parse input stream as string line by line
 		Scanner scanner = new Scanner( inputStream );
-		String line = null;
 		
-		// Parse InputStream line by line
+		// Parse and create product from input stream
+		Product product;
+		
 		while( scanner.hasNextLine() ) {
-			line = scanner.nextLine();
+			String line =  scanner.nextLine();
 			
 			// Parse and create a product for this line if matches pattern
-			Product product = productFromString( line );
+			product = productFromString( line );
+			
 			if( product != null )
 			{
-				products.add( product );
+				Product existent = ProductHelper.getProductFromList( products, product.getUpc() );
+				if( existent != null ) {
+					updateProduct(existent, product);
+				} else {
+					products.add( product );
+				}
 			}
 		}
+		
+		scanner.close();
 	}
 
 	@Override
@@ -65,7 +72,7 @@ public class Inventory implements IInventory {
 	private Product productFromString( String string ) {
 		
 		// Create regex matcher
-		String pattern = "^ *([a-zA-Z0-9]+),(\\w+),(\\d+(?:\\.\\d*)?|\\.\\d+),(\\d+(?:\\.\\d*)?|\\.\\d+),(\\d+)(?:\\.0*)? *$";
+		String pattern = "^ *([a-zA-Z0-9]+),([\\w ]+),(\\d+(?:\\.\\d*)?|\\.\\d+),(\\d+(?:\\.\\d*)?|\\.\\d+),(\\d+)(?:\\.0*)? *$";
 		Matcher m = Pattern.compile( pattern, Pattern.DOTALL ).matcher( string );
 		
 		// If matches pattern
@@ -85,6 +92,21 @@ public class Inventory implements IInventory {
 		}
 	}
 	
-	
+	/**
+	 * Updates a product from one to another incrementing quantity
+	 * 
+	 * @param from the <code>Product</code> to update
+	 * @param to the <code>Product</code> to update to
+	 */
+	private void updateProduct( Product from, Product to ) {
+		
+		if( from.getUpc().equals( to.getUpc() ) ) {
+			
+			from.setName( to.getName() );
+			from.setWholesalePrice( to.getWholesalePrice() );
+			from.setRetailPrice( to.getRetailPrice() );
+			from.setQuantity( from.getQuantity() + to.getQuantity() );
+		}
+	}
 	
 }

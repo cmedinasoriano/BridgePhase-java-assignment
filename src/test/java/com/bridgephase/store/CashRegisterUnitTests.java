@@ -7,11 +7,9 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import com.bridgephase.helper.*;
-import com.bridgephase.store.interfaces.IInventory;
 
 public class CashRegisterUnitTests {
 	
