@@ -30,7 +30,7 @@ public class StoreApplication {
 	 */
 	public static void main(String args[]) throws UnsupportedEncodingException {
 		
-		// Set a custom error handler as the default exception handler in the main/current thread
+		// Set a custom error handler as the default exception handler in main/current thread
 		Thread.currentThread().setUncaughtExceptionHandler( new MyUncaughtExceptionHandler() );
 		
 		InputStream input = inputStreamFromString(
