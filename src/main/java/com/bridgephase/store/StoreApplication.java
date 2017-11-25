@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import com.bridgephase.store.interfaces.IInventory;
 import com.bridgephase.store.MyUncaughtExceptionHandler;
 import com.bridgephase.store.CashRegister;
+import com.bridgephase.helper.*;
 
 
 /**
@@ -38,7 +39,7 @@ public class StoreApplication {
 		// Set a custom error handler as the default exception handler in main/current thread
 		Thread.currentThread().setUncaughtExceptionHandler( new MyUncaughtExceptionHandler() );
 		
-		InputStream input = inputStreamFromString(
+		InputStream input = Helper.inputStreamFromString(
 				"upc,name,wholesalePrice,retailPrice,quantity\n" + 
 				"A123,Apple,0.50,1.00,100\n" +
 				"B234,Peach,0.35,0.75,200\n" +
@@ -59,18 +60,5 @@ public class StoreApplication {
 		register.printReceipt(output);
 		
 		output.flush();
-	}
-
-	/**
-	 * This is a simple way to convert a string to an input stream.
-	 * 
-	 * @param value
-	 *            the String value to convert
-	 * @return an InputStream that can read the values from the
-	 *         <code>value</code> parameter
-	 * @throws UnsupportedEncodingException
-	 */
-	private static InputStream inputStreamFromString(String value) throws UnsupportedEncodingException {
-		return new ByteArrayInputStream(value.getBytes("UTF-8"));
 	}
 }

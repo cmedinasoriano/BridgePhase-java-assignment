@@ -41,7 +41,7 @@ public class Inventory implements IInventory {
 	@Override
 	public List<Product> list() {
 		// Returns an unmodifiable Products list
-		return Collections.unmodifiableList(products);
+		return Collections.unmodifiableList( products );
 	}
 	
 	/**
@@ -54,19 +54,19 @@ public class Inventory implements IInventory {
 		
 		// Create regex matcher
 		String pattern = "^ *([a-zA-Z0-9]+),(\\w+),(\\d+(?:\\.\\d*)?|\\.\\d+),(\\d+(?:\\.\\d*)?|\\.\\d+),(\\d+)(?:\\.0*)? *$";
-		Matcher m = Pattern.compile(pattern, Pattern.DOTALL).matcher(string);
+		Matcher m = Pattern.compile( pattern, Pattern.DOTALL ).matcher( string );
 		
 		// If matches pattern
 		if( m.matches() ) {
 
-			String upc = m.group(1);
-			String name = m.group(2);
-			float wholesalePrice = Float.parseFloat(m.group(3));
-			float retailPrice = Float.parseFloat(m.group(4));
-			int quantity = Integer.parseInt(m.group(5));
+			String upc = m.group( 1 );
+			String name = m.group( 2 );
+			float wholesalePrice = Float.parseFloat( m.group( 3 ) );
+			float retailPrice = Float.parseFloat( m.group( 4 ) );
+			int quantity = Integer.parseInt( m.group( 5 ) );
 			
 			// Return a new product
-			return new Product(upc, name, wholesalePrice, retailPrice, quantity);	
+			return new Product( upc, name, wholesalePrice, retailPrice, quantity );	
 		} else {
 			// Didn't match the pattern
 			return null;

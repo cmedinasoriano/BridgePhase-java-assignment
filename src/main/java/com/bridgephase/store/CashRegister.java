@@ -11,6 +11,7 @@ import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.bridgephase.store.interfaces.ICashRegister;
 import com.bridgephase.store.interfaces.IInventory;
@@ -136,14 +137,18 @@ public class CashRegister implements ICashRegister {
 			Product item = i.next();
 			
 			// If scanned upc is found
-			if(item.getUpc().equals(upc)) {
+			if(item.getUpc().equals( upc )) {
 				return item;
 			}
 		}
 		return null;
 	}
 	
-
+	@Override
+	public List<Product> list() {
+		// Returns an unmodifiable Products list
+		return Collections.unmodifiableList( transactionItems );
+	}
 	
 
 }

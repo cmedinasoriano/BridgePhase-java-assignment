@@ -2,6 +2,10 @@ package com.bridgephase.store.interfaces;
 
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+
+import com.bridgephase.store.Product;
 
 /**
  * Interface that represents a Cash Register.
@@ -22,7 +26,7 @@ public interface ICashRegister {
 	 * @param upc a string with the Universal Product Code
 	 * @return returns true if successful
 	 */
-	public boolean scan(String upc);
+	public boolean scan( String upc );
 
 	/**
 	 * @return returns the total retail price of all goods purchased
@@ -35,7 +39,7 @@ public interface ICashRegister {
 	 * @param cashAmount the amount paid by the customer
 	 * @return returns the amount of change due to the customer
 	 */
-	public BigDecimal pay(BigDecimal cashAmount);
+	public BigDecimal pay( BigDecimal cashAmount );
 
 	/**
 	 * Prints the receipt in the following format:
@@ -58,5 +62,11 @@ public interface ICashRegister {
 	 * 
 	 * @param os the OutputStream
 	 */
-	public void printReceipt(OutputStream os) throws Exception;
+	public void printReceipt( OutputStream os ) throws Exception;
+	
+	/**
+	 * @return returns an unmodifiable <code>List</code> of <code>Product</code> representing 
+	 * products bought as part of the transaction.
+	 */
+	public List<Product> list();
 }
